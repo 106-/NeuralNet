@@ -33,8 +33,8 @@ class NeuralNet:
 
             for n,l in enumerate(self.layers[::-1]):
                 if n==0:
-                    delta, data = l.back(data, mini_target)
-                    deltas.append(delta)
+                    data = l.back(data, mini_target)
+                    deltas.append(data)
                 else:
                     delta, data = l.back(data)
                     deltas.append(delta)

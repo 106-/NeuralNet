@@ -23,13 +23,7 @@ class Identity:
     def grad(input):
         return np.ones(input.shape)
 
-class SoftMax:
-    @staticmethod
-    def activate(input):
-        energy_max = np.max( input, axis=1, keepdims=True)
-        energy_exp = np.exp( input - energy_max )
-        return energy_exp / np.sum(energy_exp, axis=1, keepdims=True)
-    
-    @staticmethod
-    def grad(data, target):
-        return target - data
+def SoftMax(input):
+    energy_max = np.max( input, axis=1, keepdims=True)
+    energy_exp = np.exp( input - energy_max )
+    return energy_exp / np.sum(energy_exp, axis=1, keepdims=True)

@@ -29,14 +29,18 @@ class Dense:
         diff = self.optimizer.update(DenseParams(self.size, [grad_bias, grad_weight]))
         self.params += diff
 
-class SoftMaxDense(Dense):
-    def __init__(self, size, optimizer):
-        super().__init__(size, SoftMax, optimizer)
+class SoftMaxLayer:
+    def __init__(self):
+        pass
+
+    def forward(self, lower_input, **kwargs):
+        return SoftMax(lower_input)
 
     def back(self, upper_input, target):
-        delta = self.activation_func.grad(upper_input, target)
-        next_input = np.dot(delta, self.params.weight.T)
-        return delta, next_input
+        return target - upper_input
+
+    def train(self, *args):
+        pass
 
 class DenseParams(Parameter):
     names = ["bias", "weight"]

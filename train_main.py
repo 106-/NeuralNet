@@ -6,8 +6,8 @@ import logging
 from mltools.optimizer import Adamax
 from mltools.data import CategoricalData
 from NeuralNet import NeuralNet
-from ActivationFunctions import ReLU, SoftMax
-from Layers import Dense, SoftMaxDense
+from ActivationFunctions import ReLU, SoftMax, Identity
+from Layers import Dense, SoftMaxLayer
 from Validations import test_error, train_error
 
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
@@ -31,8 +31,8 @@ def main():
 
     nn = NeuralNet([
         Dense((784, 200), ReLU, Adamax()),
-        Dense((200, 200), ReLU, Adamax()),
-        SoftMaxDense((200, 10), Adamax()),
+        Dense((200, 10), Identity, Adamax()),
+        SoftMaxLayer(),
     ], validate)
     nn.train(train, test, 50, 100)
 

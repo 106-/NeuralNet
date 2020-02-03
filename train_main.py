@@ -8,7 +8,7 @@ from mltools.data import CategoricalData
 from NeuralNet import NeuralNet
 from ActivationFunctions import ReLU, SoftMax, Identity
 from Layers import Dense, SoftMaxLayer
-from Validations import test_error, train_error
+from Validations import test_error, train_error, cross_entrpy
 
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
 np.seterr(over="raise", invalid="raise")
@@ -28,6 +28,7 @@ def main():
     def validate(update_time, model, train, test):
         test_error(update_time, model, test)
         train_error(update_time, model, train)
+        cross_entrpy(update_time, model, train)
 
     nn = NeuralNet([
         Dense((784, 200), ReLU, Adamax()),

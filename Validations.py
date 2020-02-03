@@ -16,3 +16,9 @@ def train_error(update_time, model, data):
     correct = np.sum(predict==data.original_answer)
     data_length = len(data)
     logging.info("train correct rate: {} ( {} / {} )".format( correct / data_length, correct, data_length ))
+
+def cross_entrpy(update_time, model, data):
+    output = model.forward(data.data.data)
+    entrpy = -np.sum(data.answer.data * np.log(output + 1e-8), axis=1)
+    entrpy_mean = np.mean(entrpy)
+    logging.info("cross entrpy: {}".format( entrpy_mean ))

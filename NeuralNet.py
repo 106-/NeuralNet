@@ -3,6 +3,7 @@
 import numpy as np
 import logging
 import copy
+import dill
 from mltools import EpochCalc
 from mltools.data import CategoricalData
 
@@ -10,8 +11,6 @@ class NeuralNet:
     def __init__(self, layers, validate=None):
         self.layers = layers
         self.validate = validate
-        if not self.validate:
-            self.validate = lambda *args: None
     
     def forward(self, input):
         for l in self.layers:
@@ -48,4 +47,12 @@ class NeuralNet:
 
             if i % ec.epoch_to_update(1) == 0:
                 logging.info("[ {} / {} ]( {} / {} )".format(ec.update_to_epoch(i, force_integer=False), ec.train_epoch, i, ec.train_update))
-                self.validate(i, self, train_data, test_data)
+                if self.validate:
+                    self.validate(i, self, train_data, test_data)
+    
+    def save(self, filename):
+        dill.dump(self, open(filename, "wb+"))
+    
+    @staticmethod
+    def load(filename):
+        return dill.load(open(filename, "rb"))

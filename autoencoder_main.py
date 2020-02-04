@@ -20,7 +20,7 @@ def load_mnist(filename):
     return d
 
 def main():
-    train = load_mnist("./data/mnist_train.npy")
+    train = load_mnist("./data/zero.npy")
 
     def validate(update_time, model, train, test):
         mean_square(update_time, model, train)
@@ -31,6 +31,7 @@ def main():
         MeanSquareErrorLayer()
     ], validate)
     nn.train(train, train, 50, 100)
+    nn.save("zero.pickle")
 
 if __name__=='__main__':
     main()

@@ -22,3 +22,8 @@ def cross_entrpy(update_time, model, data):
     entrpy = -np.sum(data.answer.data * np.log(output + 1e-8), axis=1)
     entrpy_mean = np.mean(entrpy)
     logging.info("cross entrpy: {}".format( entrpy_mean ))
+
+def mean_square(update_time, model, data):
+    output = model.forward(data.data.data)
+    mean = np.mean((output - data.data.data)**2)
+    logging.info("mean square: {}".format( mean ))

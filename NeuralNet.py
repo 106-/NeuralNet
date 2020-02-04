@@ -4,6 +4,7 @@ import numpy as np
 import logging
 import copy
 from mltools import EpochCalc
+from mltools.data import CategoricalData
 
 class NeuralNet:
     def __init__(self, layers, validate=None):
@@ -22,7 +23,10 @@ class NeuralNet:
         
         self.validate(0, self, train_data, test_data)
         for i in range(1, ec.train_update+1):
-            mini_data, mini_target = train_data.minibatch(minibatch_size)
+            if isinstance(train_data, CategoricalData):
+                mini_data, mini_target = train_data.minibatch(minibatch_size)
+            else:
+                mini_data = mini_target = train_data.minibatch(minibatch_size)
             data = copy.deepcopy(mini_data)
             forwards = [mini_data]
             deltas = []

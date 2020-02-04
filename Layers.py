@@ -42,6 +42,19 @@ class SoftMaxLayer:
     def train(self, *args):
         pass
 
+class MeanSquareErrorLayer:
+    def __init__(self):
+        pass
+
+    def forward(self, lower_input, **kwargs):
+        return lower_input
+    
+    def back(self, upper_input, target):
+        return target - upper_input
+    
+    def train(self, *args):
+        pass
+
 class DenseParams(Parameter):
     names = ["bias", "weight"]
 

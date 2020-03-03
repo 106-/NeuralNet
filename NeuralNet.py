@@ -17,10 +17,10 @@ class NeuralNet:
             input = l.forward(input)
         return input
     
-    def train(self, train_data, test_data, epoch, minibatch_size):
+    def train(self, train_data, test_data, epoch, minibatch_size, learning_log):
         ec = EpochCalc(epoch, len(train_data), minibatch_size)
         
-        self.validate(0, self, train_data, test_data)
+        self.validate(0, self, train_data, test_data, learning_log)
         for i in range(1, ec.train_update+1):
             if isinstance(train_data, CategoricalData):
                 mini_data, mini_target = train_data.minibatch(minibatch_size)
@@ -48,7 +48,7 @@ class NeuralNet:
             if i % ec.epoch_to_update(1) == 0:
                 logging.info("[ {} / {} ]( {} / {} )".format(ec.update_to_epoch(i, force_integer=False), ec.train_epoch, i, ec.train_update))
                 if self.validate:
-                    self.validate(i, self, train_data, test_data)
+                    self.validate(ec.update_to_epoch(i), self, train_data, test_data, learning_log)
     
     def save(self, filename):
         dill.dump(self, open(filename, "wb+"))

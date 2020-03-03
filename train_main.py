@@ -5,6 +5,7 @@ import numpy as np
 import logging
 from mltools.optimizer import Adamax
 from mltools.data import CategoricalData
+from mltools import LearningLog
 from NeuralNet import NeuralNet
 from ActivationFunctions import ReLU, SoftMax, Identity
 from Layers import Dense, SoftMaxLayer
@@ -24,18 +25,26 @@ def load_mnist(filename):
 def main():
     test = load_mnist("./data/mnist_test.npy")
     train = load_mnist("./data/mnist_train.npy")
+    learning_log = LearningLog({})
 
-    def validate(update_time, model, train, test):
-        test_error(update_time, model, test)
-        train_error(update_time, model, train)
-        cross_entrpy(update_time, model, train)
+    def validate(epoch, model, train, test, learning_log):
+        test_correct = test_error(model, test)
+        logging.info("test correct rate: {}".format(test_correct))
+        train_correct = train_error(model, train)
+        logging.info("train correct rate: {}".format(train_correct))
+        ce = cross_entrpy(model, train)
+        logging.info("cross entrpy: {}".format(ce))
+        learning_log.make_log(epoch, "test-correct", [test_correct])
+        learning_log.make_log(epoch, "train-correct", [train_correct])
+        learning_log.make_log(epoch, "cross_entropy", [ce])
 
     nn = NeuralNet([
         Dense((784, 200), ReLU, Adamax()),
         Dense((200, 10), Identity, Adamax()),
         SoftMaxLayer(),
     ], validate)
-    nn.train(train, test, 50, 100)
+    nn.train(train, test, 50, 100, learning_log)
+    learning_log.save("learning_log.json")
 
 if __name__=='__main__':
     main()
